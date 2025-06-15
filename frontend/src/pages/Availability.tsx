@@ -104,7 +104,7 @@ export default function AvailabilityPage() {
 		)
 
 	const handleConfirm = async () => {
-		await save(selectedDate, classId)
+		await save(selectedDate);
 	}
 
 	/* ---------- UI ---------- */
