@@ -19,7 +19,7 @@ declare global {
 }
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors({
   origin: 'https://afspraakplanner-frontend-gqfvfnd4b7ambzck.westeurope-01.azurewebsites.net',
