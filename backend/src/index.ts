@@ -41,7 +41,7 @@ app.use(
     cookie: {
       maxAge: 24 * 60 * 60 * 1000,
       sameSite: 'lax',
-      secure: false,
+      secure: true,
     },
     secret: "secret",
     proxy: true,
