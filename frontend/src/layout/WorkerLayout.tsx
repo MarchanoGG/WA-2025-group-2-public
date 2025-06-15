@@ -1,0 +1,14 @@
+// src/layout/WorkerLayout.tsx
+import { Outlet } from 'react-router-dom'
+import SessionHeader from "../components/SessionHeader"
+
+export default function WorkerLayout() {
+  return (
+    <>
+      <SessionHeader />
+      <main className="p-4">
+        <Outlet />
+      </main>
+    </>
+  )
+}
