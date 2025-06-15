@@ -144,8 +144,6 @@ router.get('/appointments/:userId', async (req, res) => {
     res.status(200).json(appointments);
 });
 
-export default router;
-
 router.post('/appointments/:id', async (req, res) => {
     const { code } = req.body;
 
@@ -189,3 +187,7 @@ router.post('/appointments/:id', async (req, res) => {
 
     res.status(200).json(appointment);
 });
+
+export default router;
+
+
