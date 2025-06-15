@@ -32,6 +32,9 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
+      - name: Log backend contents
+        run: ls -R backend
+
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
