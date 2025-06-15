@@ -27,7 +27,7 @@ export default function AvailabilityPage() {
 
 	const [selectedDate, setSelectedDate] = useState<Date>(new Date())
 	const [slotDuration, setSlotDuration] = useState<number>(15)
-	const [classId] = useState<number>(1)
+	
 
 	const {
 		loading,
