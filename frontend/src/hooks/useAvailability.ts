@@ -21,7 +21,7 @@ export interface UseAvailabilityReturn {
     selectedSlots: Date[]
     setSelectedSlots: React.Dispatch<React.SetStateAction<Date[]>>
     toggleSlot(slot: Date): void
-    save(day: Date, classId: number): Promise<void>
+    save(day: Date): Promise<void>
 }
 
 const toLocalIso = (d: Date) =>
@@ -64,7 +64,8 @@ export function useAvailability(
     }
 
     /* ---------------- SAVE ---------------- */
-    async function save(day: Date, classId: number) {
+    async function save(day: Date) {
+
         const dayStart = startOfDay(day).getTime()
         const dayEnd = endOfDay(day).getTime()
 

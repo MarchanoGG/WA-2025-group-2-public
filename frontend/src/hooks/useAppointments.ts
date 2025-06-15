@@ -7,7 +7,7 @@ import {
     clearAppointments,
     rejectAppointment,
 } from '../store/appointmentsSlice'
-import type { Appointment } from '../types/interfaces'
+
 
 /**
  * Hook voor je Overview-pagina: haalt één keer bij mount alle afspraken op
