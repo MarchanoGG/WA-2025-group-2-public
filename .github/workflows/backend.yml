@@ -25,7 +25,7 @@ jobs:
           npm run generate
           npm run migrate
           npm run seed
-          npm run build || echo "No build step"
+          npm run build
 
       - name: Azure Login
         uses: azure/login@v1
