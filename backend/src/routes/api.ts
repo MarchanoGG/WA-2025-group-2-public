@@ -79,8 +79,16 @@ router.post('/users', async (req: Request, res: Response) => {
         }
     }
 
-    let user;
+    const existingUser = await prisma.user.findUnique({
+        where: { username: userData.username },
+    });
 
+    if (existingUser) {
+        res.status(400).send('User already exists');
+        return;
+    }
+
+    let user;
     if (userData.id) {
         user = await prisma.user.update({
             where: { id: parseInt(userData.id) },
