@@ -358,7 +358,13 @@ router.post('/appointments/:userId', async (req, res) => {
 
 router.post('/appointments/:id/reject', async (req, res) => {
     if (!await isAdmin(req)) {
-        if (req.params.id && parseInt(req.params.id) !== (req.user as User)?.id) {
+        const appointment = await prisma.appointment.findUnique({
+            where: { id: parseInt(req.params.id) },
+            include: {
+                user: true,
+            }
+        });
+        if (appointment?.userId !== (req.user as User)?.id) {
             res.status(403).send('Forbidden');
             return;
         }
