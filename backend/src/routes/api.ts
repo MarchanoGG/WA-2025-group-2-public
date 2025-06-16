@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import prisma from '../db';
 import { Role, User, Class, Appointment } from '../../prisma/__generated';
+import bcrypt from 'bcryptjs';
 
 const router = express.Router();
 
@@ -65,7 +66,11 @@ router.post('/users', async (req: Request, res: Response) => {
 
     console.log(req.body);
 
-    const {roles, ...userData} = req.body;
+    const {roles, password, ...userData} = req.body;
+
+    if (password) {
+        userData.password = await bcrypt.hash(password, 10);
+    }
 
     if (roles) {
         if (!await isAdmin(req)) {
