@@ -22,7 +22,7 @@ jobs:
         run: |
           cd frontend
           npm install
-          npm run dev
+          npm run build
 
       - name: Azure Login
         uses: azure/login@v1
