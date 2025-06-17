@@ -84,7 +84,7 @@ export default function AvailabilityPage() {
   const isExistingOpen = (slot: Date) => openSlots.some(({ startTime }) => roundToMinute(new Date(startTime)).getTime() === slot.getTime());
 
   const handleConfirm = async () => {
-    await save(selectedDate, classId);
+    await save(selectedDate);
   };
 
   const hasBookingsForSelectedDay = useMemo(() => {
