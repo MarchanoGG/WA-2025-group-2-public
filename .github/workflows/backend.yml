@@ -35,16 +35,9 @@ jobs:
       - name: Log backend contents
         run: ls -R backend
 
-      - name: Move backend build output to root
-        run: |
-          cp backend/web.config .
-          cp -r backend/dist .
-          cp -r backend/prisma .
-          cp backend/package.json .
-
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
         with:
           app-name: afspraakplanner-backend
           slot-name: production
-          package: .
+          package: backend
