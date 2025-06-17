@@ -1,75 +1,59 @@
-import express, { Request, Response, RequestHandler } from 'express';
-import session from 'express-session';
-import passport from './config/passport';
-import authRoutes from './routes/auth';
-import parentApiRoutes from './routes/parent-api';
-import prisma from './db';
-import { requireAuth } from './middleware/auth';
-import apiRoutes from './routes/api';
-import {PrismaSessionStore} from '@quixo3/prisma-session-store';
-import cors from 'cors';
-
-// Extend Express Request type to include user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: User;
-    }
-  }
-}
-
-const app = express();
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = __importDefault(require("express"));
+const express_session_1 = __importDefault(require("express-session"));
+const passport_1 = __importDefault(require("./config/passport"));
+const auth_1 = __importDefault(require("./routes/auth"));
+const parent_api_1 = __importDefault(require("./routes/parent-api"));
+const db_1 = __importDefault(require("./db"));
+const auth_2 = require("./middleware/auth");
+const api_1 = __importDefault(require("./routes/api"));
+const prisma_session_store_1 = require("@quixo3/prisma-session-store");
+const cors_1 = __importDefault(require("cors"));
+const app = (0, express_1.default)();
 const port = process.env.PORT || 3000;
-
-app.use(cors({
-  origin: 'https://afspraakplanner-frontend-gqfvfnd4b7ambzck.westeurope-01.azurewebsites.net',
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+app.use((0, cors_1.default)({
+    origin: 'https://afspraakplanner-frontend-gqfvfnd4b7ambzck.westeurope-01.azurewebsites.net',
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
-app.options('*', cors());
-
+app.options('*', (0, cors_1.default)());
 // Middleware
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-
-
-
-app.use(
-  session({
+app.use(express_1.default.json());
+app.use(express_1.default.urlencoded({ extended: true }));
+app.use((0, express_session_1.default)({
     name: 'wa_2025_session',
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000,
-      sameSite: 'lax',
-      secure: true,
+        maxAge: 24 * 60 * 60 * 1000,
+        sameSite: 'lax',
+        secure: true,
     },
     secret: "secret",
     proxy: true,
     resave: false,
     saveUninitialized: false,
-    store: new PrismaSessionStore(prisma as any, {
-      checkPeriod: 2 * 60 * 1000, //ms
-      dbRecordIdIsSessionId: false,
-      dbRecordIdFunction: undefined,
+    store: new prisma_session_store_1.PrismaSessionStore(db_1.default, {
+        checkPeriod: 2 * 60 * 1000, //ms
+        dbRecordIdIsSessionId: false,
+        dbRecordIdFunction: undefined,
     }),
-  })
-);
-
+}));
 // Initialize Passport and restore authentication state from session
-app.use(passport.initialize());
-app.use(passport.session());
-
+app.use(passport_1.default.initialize());
+app.use(passport_1.default.session());
 // Apply authentication middleware by default, excluding specific paths
-app.use(requireAuth(['/login', '/auth/login', '/auth/register', '/parent-api'] as any));
-
+app.use((0, auth_2.requireAuth)(['/login', '/auth/login', '/auth/register', '/parent-api']));
 // Routes
-app.use('/auth', authRoutes);
-app.use('/api', apiRoutes);
-app.use('/parent-api', parentApiRoutes);
-
+app.use('/auth', auth_1.default);
+app.use('/api', api_1.default);
+app.use('/parent-api', parent_api_1.default);
 // Serve login page
-app.get('/login', ((req: Request, res: Response) => {
-  res.send(`
+app.get('/login', ((req, res) => {
+    res.send(`
     <!DOCTYPE html>
     <html>
       <head>
@@ -99,15 +83,14 @@ app.get('/login', ((req: Request, res: Response) => {
       </body>
     </html>
   `);
-}) as RequestHandler);
-
+}));
 // Serve profile page
-app.get('/me', ((req: Request, res: Response) => {
-  if (!req.user) {
-    return res.redirect('/login');
-  }
-  const user = req.user as any;
-  res.send(`
+app.get('/me', ((req, res) => {
+    if (!req.user) {
+        return res.redirect('/login');
+    }
+    const user = req.user;
+    res.send(`
     <!DOCTYPE html>
     <html>
       <head>
@@ -157,14 +140,10 @@ app.get('/me', ((req: Request, res: Response) => {
       </body>
     </html>
   `);
-}) as RequestHandler);
-
-
+}));
 app.get('/', (_req, res) => {
-  res.send('Hello World!');
+    res.send('Hello World!');
 });
-
-
 app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
+    console.log(`Server is running at http://localhost:${port}`);
 });

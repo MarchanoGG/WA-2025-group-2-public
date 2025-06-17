@@ -1,4 +1,5 @@
 node_modules
-dist
+# dist mag niet meer genegeerd worden voor Azure deploy
+# dist
 prisma/db/*
 prisma/__generated/*
