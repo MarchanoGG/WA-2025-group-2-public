@@ -1,8 +1,8 @@
 // src/pages/Confirm.tsx
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import type { RootState, AppDispatch } from "../store";
+import {  useSelector } from "react-redux";
+import type { RootState  } from "../store";
 import { format } from "date-fns";
 import Button from "../components/Button";
 import { api } from "../api/client";

@@ -4,7 +4,7 @@ import Button from "../components/Button";
 import { useNavigate } from "react-router-dom";
 import { api } from "../api/client";
 import { useDispatch } from "react-redux";
-import { ParentBookingState, setField } from "../store/parentBookingSlice";
+import {  setField } from "../store/parentBookingSlice";
 
 export default function ParentsLogin() {
   const [code, setCode] = useState("");
