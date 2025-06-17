@@ -6,7 +6,7 @@ import {
     clearAppointments,
     rejectAppointment,
 } from '../store/appointmentsSlice'
-import type { Appointment } from '../types/interfaces'
+
 
 
 export function useAppointments(userId: number) {

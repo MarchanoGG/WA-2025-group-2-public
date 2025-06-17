@@ -3,14 +3,13 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import type { RootState, AppDispatch } from "../store";
-import { resetBooking } from "../store/parentBookingSlice";
 import { format } from "date-fns";
 import Button from "../components/Button";
 import { api } from "../api/client";
 
 export default function Confirm() {
   const navigate = useNavigate();
-  const dispatch = useDispatch<AppDispatch>();
+
   const booking = useSelector((s: RootState) => s.parentBooking);
 
   const [loading, setLoading] = useState(false);

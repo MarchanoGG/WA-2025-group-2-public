@@ -47,6 +47,4 @@ export default function ParentsLogin() {
     </div>
   );
 }
-function dispatch(arg0: { payload: { field: keyof ParentBookingState; value: string | number | null }; type: "parentBooking/setField" }) {
-  throw new Error("Function not implemented.");
-}
+

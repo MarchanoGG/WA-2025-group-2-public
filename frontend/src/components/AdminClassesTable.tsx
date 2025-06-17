@@ -1,5 +1,5 @@
 import type { ClassWithUsers } from '../api/classes'
-import React from 'react'
+
 
 type Props = {
     data: ClassWithUsers[]
