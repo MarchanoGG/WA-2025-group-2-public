@@ -35,10 +35,12 @@ jobs:
       - name: Log backend contents
         run: ls -R backend
 
-      - name: Move build output and web.config to root
+      - name: Move backend build output to root
         run: |
           cp backend/web.config .
           cp -r backend/dist .
+          cp -r backend/prisma .
+          cp backend/package.json .
 
       - name: Deploy to Azure App Service
         uses: azure/webapps-deploy@v2
