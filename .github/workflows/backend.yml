@@ -1,0 +1,43 @@
+name: Deploy Backend (Afspraakplanner)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-api:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+
+      - name: Install dependencies & setup backend
+        run: |
+          cd backend
+          npm install
+          npm run generate
+          npm run migrate
+          npm run seed
+          npm run build
+
+      - name: Azure Login
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Log backend contents
+        run: ls -R backend
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: afspraakplanner-backend
+          slot-name: production
+          package: backend
