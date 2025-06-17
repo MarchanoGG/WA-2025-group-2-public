@@ -29,10 +29,8 @@ export default function AdminPopup({ user, onClose, onDelete, onUpdate }: Props)
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      {/* Achtergrond overlay met blur en transparantie */}
       <div className="absolute inset-0 bg-black/60 z-40" />
 
-      {/* Popup zelf */}
       <div className="relative bg-white rounded-lg p-6 w-full max-w-md shadow-md border z-50">
         <h2 className="text-lg font-semibold mb-4">Klas aanpassen</h2>
 

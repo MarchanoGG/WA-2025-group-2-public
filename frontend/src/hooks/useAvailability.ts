@@ -38,12 +38,10 @@ export function useAvailability(
 
     const [selectedSlots, setSelectedSlots] = useState<Date[]>([])
 
-    /* één fetch bij mount */
     useEffect(() => {
         dispatch(fetchAppointments(userId))
     }, [dispatch, userId])
 
-    /* open = niet geclaimd & niet gereject */
     const openSlots = useMemo(
         () => data.filter((a: Appointment) => !a.isRejected && !a.isClaimed),
         [data],
@@ -63,24 +61,20 @@ export function useAvailability(
         })
     }
 
-    /* ---------------- SAVE ---------------- */
     async function save(day: Date, classId: number) {
         const dayStart = startOfDay(day).getTime()
         const dayEnd = endOfDay(day).getTime()
 
-        /* 1. Open slots van ALLE andere dagen gewoon meenemen */
         const otherDays = openSlots.filter((a: { startTime: string | number | Date }) => {
             const t = new Date(a.startTime).getTime()
             return t < dayStart || t > dayEnd
         })
 
-        /* 2. Binnen huidige dag… */
         const existingToday = openSlots.filter((a: { startTime: string | number | Date }) => {
             const t = new Date(a.startTime).getTime()
             return t >= dayStart && t <= dayEnd
         })
 
-        /* 2a  geselecteerde slots behouden/aanmaken  */
         const currentDayPayload: Partial<Appointment>[] = selectedSlots.map((slot) => {
             const end = addMinutes(slot, slotDuration)
             const found = existingToday.find(
@@ -91,9 +85,6 @@ export function useAvailability(
                 : { startTime: toLocalIso(slot), endTime: toLocalIso(end) }
         })
 
-        /* 2b  slots die niet meer geselecteerd zijn NIET meesturen → backend verwijdert ze */
-
-        /* 3. Combineer payload: andere dagen + (nieuwe/bestaande) huidige dag */
         const fullPayload: Partial<Appointment>[] = [
             ...otherDays.map((a: { id: any; startTime: any; endTime: any }) => ({
                 id: a.id,

@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import prisma from '../db';
-import { Role, User, Class, Appointment } from '../../prisma/__generated';
+import { sendAppointmentConfirmation } from '../config/email';
 
 const router = express.Router();
 
@@ -27,7 +27,7 @@ router.get('/validateParentCode', async (req, res) => {
     res.status(200).json({ success: true });
 });
 
-router.get('/classes', async (req, res) => {
+router.post('/classes', async (req, res) => {
     const { code } = req.body;
 
     if (!code) {
@@ -116,7 +116,7 @@ router.get('/classes/:id', async (req, res) => {
     res.status(200).json(classData);
 });
 
-router.get('/appointments/:userId', async (req, res) => {
+router.post('/appointments/:userId', async (req, res) => {
     const { code } = req.body;
 
     if (!code) {
@@ -146,7 +146,7 @@ router.get('/appointments/:userId', async (req, res) => {
 
 export default router;
 
-router.post('/appointments/:id', async (req, res) => {
+router.post('/bookappointments/:id', async (req, res) => {
     const { code } = req.body;
 
     if (!code) {
@@ -184,8 +184,31 @@ router.post('/appointments/:id', async (req, res) => {
                     id: req.body.classId
                 }
             } : undefined)
+        },
+        include: {
+            user: {
+                select: {
+                    firstName: true,
+                    lastName: true
+                }
+            }
         }
     });
+
+    try {
+        // Send confirmation email
+        if (appointment.email) {
+            await sendAppointmentConfirmation(appointment.email, {
+                studentName: appointment.studentName || '',
+                startTime: appointment.startTime,
+                endTime: appointment.endTime,
+                teacherName: `${appointment.user.firstName} ${appointment.user.lastName}`
+            });
+        }
+
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
 
     res.status(200).json(appointment);
 });

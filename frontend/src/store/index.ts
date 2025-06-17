@@ -17,7 +17,7 @@ const rootReducer = combineReducers({
 const persistConfig = {
 	key: 'root',
 	storage,
-	whitelist: ['auth'], // alleen auth persist
+	whitelist: ['auth', 'appointments', 'parentBooking'], 
 }
 
 export const store = configureStore({

@@ -5,8 +5,8 @@ import TextInput from '../components/TextInput'
 
 export default function Login() {
 	const { login, status, error } = useAuth()
-	const [username, setUsername] = useState('admin')
-	const [password, setPassword] = useState('admin')
+	const [username, setUsername] = useState('')
+	const [password, setPassword] = useState('')
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()

@@ -24,6 +24,7 @@ export default function DebugMenu() {
 	const reduxState = useSelector((s: RootState) => s)
 	const { login } = useAuth()
 
+	const [visible, setVisible] = useState(false)
 	const [expanded, setExpanded] = useState(false)
 	const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -41,10 +42,24 @@ export default function DebugMenu() {
 	}
 
 	useEffect(() => {
+		const handleKeyDown = (e: KeyboardEvent) => {
+			if (e.key === '=') setVisible(true)
+		}
+		const handleKeyUp = (e: KeyboardEvent) => {
+			if (e.key === '=') {
+				setExpanded(false)
+				setVisible(false)
+			}
+		}
+		window.addEventListener('keydown', handleKeyDown)
+		window.addEventListener('keyup', handleKeyUp)
 		return () => {
-			if (timeoutRef.current) clearTimeout(timeoutRef.current)
+			window.removeEventListener('keydown', handleKeyDown)
+			window.removeEventListener('keyup', handleKeyUp)
 		}
 	}, [])
+
+	if (!visible) return null
 
 	return (
 		<div

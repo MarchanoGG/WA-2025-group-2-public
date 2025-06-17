@@ -1,4 +1,3 @@
-// src/components/AppointmentPopup.tsx
 import { format } from 'date-fns'
 import type { Appointment } from '../types/interfaces'
 import { useRejectAppointment } from '../hooks/useAppointments'
@@ -11,13 +10,11 @@ type Props = {
 export default function AppointmentPopup({ item, onClose }: Props) {
 	const reject = useRejectAppointment(item.userId)
 
-	// Eventueel kun je hier loading-state uit Redux halen,
-	// maar voor eenvoud laat ik de knop disabled tijdens de call:
 	const handleReject = async () => {
 		try {
 			await reject(item.id)
 		} catch {
-			// optioneel: toon een foutmelding
+			// Just leave it empty, the page should not show errors, thats the only function of this
 		} finally {
 			onClose()
 		}

@@ -38,9 +38,9 @@ model User {
 
 model UserRole {
   userId Int
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
   roleId Int
-  role   Role @relation(fields: [roleId], references: [id])
+  role   Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
 
   @@id([userId, roleId])
 }
@@ -58,9 +58,9 @@ model Class {
 
 model UserClass {
   userId  Int
-  user    User  @relation(fields: [userId], references: [id])
+  user    User  @relation(fields: [userId], references: [id], onDelete: Cascade)
   classId Int
-  class   Class @relation(fields: [classId], references: [id])
+  class   Class @relation(fields: [classId], references: [id], onDelete: Cascade)
 
   @@id([userId, classId])
 }
@@ -76,12 +76,12 @@ model Appointment {
   endTime       DateTime
   isClaimed     Boolean  @default(false)
   isRejected    Boolean  @default(false)
-  user          User     @relation(fields: [userId], references: [id])
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId        Int
-  class         Class?   @relation(fields: [classId], references: [id])
+  class         Class?   @relation(fields: [classId], references: [id], onDelete: SetNull)
   classId       Int?
 
-  parentCode   ParentCode? @relation(fields: [parentCodeId], references: [id])
+  parentCode   ParentCode? @relation(fields: [parentCodeId], references: [id], onDelete: SetNull)
   parentCodeId Int?
 
   createdAt DateTime @default(now())

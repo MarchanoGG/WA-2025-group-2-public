@@ -1,8 +1,5 @@
-// src/types/interfaces.ts
-
 import { JSX } from "react"
 
-// ---- Auth & User ----
 export interface UserRole {
 	role: {
 		id: number
@@ -32,7 +29,6 @@ export interface AuthState {
 	error: string | null
 }
 
-// ---- Backend Models ----
 export interface Appointment {
 	id: number
 	studentNumber: string | null
@@ -57,7 +53,6 @@ export interface AppointmentState {
 	error: string | null
 }
 
-// ---- Routes & Layout ----
 export interface RouteConfig {
 	path: string
 	element: JSX.Element

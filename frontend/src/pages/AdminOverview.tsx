@@ -1,41 +1,65 @@
-import { useState } from "react";
-import OverviewTable from "../components/OverviewTable";
-import OverviewSearch from "../components/OverviewSearch";
-import AdminOverviewPopup from "../components/AdminOverviewPopup";
-import Toast from "../components/Toast";
-import { dummyAdminAppointments } from "../dummyAdminOverview";
-import type { Appointment } from "../types/interfaces";
+import { useEffect, useState } from 'react';
+import OverviewTable from '../components/OverviewTable';
+import OverviewSearch from '../components/OverviewSearch';
+import AdminOverviewPopup from '../components/AdminOverviewPopup';
+import Toast from '../components/Toast';
+
+import {
+  getAppointments,
+  deleteAppointment,
+  type Appointment,
+} from '../api/appointments';
 
 export default function AdminOverview() {
-  const [search, setSearch] = useState("");
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [search, setSearch] = useState('');
   const [page, setPage] = useState(1);
   const [selected, setSelected] = useState<Appointment | null>(null);
-  const [appointments, setAppointments] = useState(dummyAdminAppointments);
-  const [toast, setToast] = useState("");
+  const [toast, setToast] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
 
-  const filtered = appointments.filter((a) =>
-    a.studentName?.toLowerCase().includes(search.toLowerCase())
-  );
+  useEffect(() => {
+    (async () => {
+      try {
+        const data = await getAppointments();
+        setAppointments(data);
+      } catch (err) {
+        console.error(err);
+        setError('Kon afspraken niet ophalen.');
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
-  const pageSize = 5;
+  const pageSize = 15;
+
+  const filtered = appointments
+    .filter(a => a.studentName && a.studentName.trim() !== '')
+    .filter(a =>
+      a.studentName!.toLowerCase().includes(search.toLowerCase()),
+    );
+
   const totalPages = Math.ceil(filtered.length / pageSize);
   const currentPageData = filtered.slice(
     (page - 1) * pageSize,
-    page * pageSize
+    page * pageSize,
   );
 
-  const handleDelete = (id: number) => {
-    setAppointments((prev) => prev.filter((a) => a.id !== id));
-    setSelected(null);
-    setToast("Afspraak is verwijderd.");
-  };
+  const handleSelect = (item: Appointment) => setSelected(item);
 
-  const handleSave = (updatedItem: Appointment) => {
-    setAppointments((prev) =>
-      prev.map((a) => (a.id === updatedItem.id ? updatedItem : a))
-    );
-    setSelected(null);
-    setToast("Afspraak is opgeslagen.");
+  const handleDelete = async (id: number) => {
+    try {
+      await deleteAppointment(id);
+      setAppointments(prev => prev.filter(a => a.id !== id));
+      setToast('Afspraak is verwijderd.');
+    } catch (err) {
+      console.error(err);
+      setToast('Verwijderen mislukt.');
+    } finally {
+      setSelected(null);
+    }
   };
 
   return (
@@ -43,25 +67,34 @@ export default function AdminOverview() {
       <h1 className="text-xl font-semibold text-center mb-4">
         Admin Overzicht Afspraken
       </h1>
+
       <div className="bg-white rounded-md p-4 shadow-sm">
         <OverviewSearch value={search} onChange={setSearch} />
-        <OverviewTable
-          data={currentPageData}
-          onSelect={setSelected}
-          page={page}
-          totalPages={totalPages}
-          setPage={setPage}
-        />
+
+        {loading ? (
+          <p className="text-center text-sm text-gray-500">Laden…</p>
+        ) : error ? (
+          <p className="text-center text-sm text-red-600">{error}</p>
+        ) : (
+          <OverviewTable
+            data={currentPageData}
+            onSelect={handleSelect}
+            page={page}
+            totalPages={totalPages}
+            setPage={setPage}
+          />
+        )}
       </div>
+
       {selected && (
         <AdminOverviewPopup
           item={selected}
           onClose={() => setSelected(null)}
           onDelete={handleDelete}
-          onSave={handleSave}
         />
       )}
-      {toast && <Toast message={toast} onClose={() => setToast("")} />}
+
+      {toast && <Toast message={toast} onClose={() => setToast('')} />}
     </div>
   );
 }

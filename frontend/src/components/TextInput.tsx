@@ -7,7 +7,7 @@ interface TextInputProps {
 	label?: string;
 	type?: React.HTMLInputTypeAttribute;
 	name?: string;
-	classes?: string;          // extra Tailwind-classes van buitenaf
+	classes?: string;
 }
 
 export default function TextInput({

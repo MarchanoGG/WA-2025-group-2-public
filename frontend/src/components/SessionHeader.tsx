@@ -15,7 +15,6 @@ export default function SessionHeader() {
 	return (
 		<header className="bg-white shadow-sm border-b border-blue-100">
 			<div className="container mx-auto px-4 py-3 flex items-center justify-between relative">
-				{/* Links: Hamburger en desktop-Afmelden */}
 				<div className="flex items-center gap-3 flex-shrink-0">
 					<button
 						onClick={() => setMenuOpen(!menuOpen)}
@@ -31,14 +30,12 @@ export default function SessionHeader() {
 					</button>
 				</div>
 
-				{/* Midden: Navigatie menu */}
 				{(isAdmin || isNotAdmin) && (
 					<div className={`z-50 ${menuOpen
 						? 'flex flex-col gap-4 bg-white shadow-md border rounded p-4 absolute top-16 left-4 right-4'
 						: 'hidden'
 					} md:flex md:flex-row md:gap-10 md:justify-center md:static md:bg-transparent md:shadow-none md:border-none md:p-0`}>
 
-						{/* Admin links */}
 						{isAdmin && (
 							<>
 								<NavLink to="/admin/Overview" className={({ isActive }) => `px-4 py-2 rounded font-medium ${isActive ? 'bg-blue-600 text-white' : 'border border-blue-300 text-blue-600 hover:bg-blue-50'}`}>Afspraken</NavLink>
@@ -48,7 +45,6 @@ export default function SessionHeader() {
 							</>
 						)}
 
-						{/* Mentor / Decaan links */}
 						{isNotAdmin && (
 							<>
 								<NavLink to="/Overview" className={({ isActive }) => `px-4 py-2 rounded font-medium ${isActive ? 'bg-blue-600 text-white' : 'border border-blue-300 text-blue-600 hover:bg-blue-50'}`}>Afspraken</NavLink>
@@ -56,7 +52,6 @@ export default function SessionHeader() {
 							</>
 						)}
 
-						{/* Afmelden in mobiel menu */}
 						{menuOpen && (
 							<button
 								onClick={logout}
