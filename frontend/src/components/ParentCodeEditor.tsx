@@ -17,9 +17,7 @@ export default function ParentCodeEditor({ code, onClose, onSave, onDelete }: Pr
     setCurrent(prev => ({ ...prev, code: e.target.value }));
   };
 
-  const handleUsedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    setCurrent(prev => ({ ...prev, used: e.target.value === "Ja" }));
-  };
+
 
   function handleEmailClick(code: string): void {
     const subject = encodeURIComponent("Uw oudercode voor EduPlanner");
