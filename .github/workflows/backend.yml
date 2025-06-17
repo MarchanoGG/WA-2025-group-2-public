@@ -40,4 +40,4 @@ jobs:
         with:
           app-name: afspraakplanner-backend
           slot-name: production
-          package: backend
+          package: backend/
