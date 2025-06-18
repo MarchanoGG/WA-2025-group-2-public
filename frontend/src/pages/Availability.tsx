@@ -14,7 +14,7 @@ export default function AvailabilityPage() {
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [slotDuration, setSlotDuration] = useState<number>(15);
-  const [classId] = useState<number>(1);
+  
 
   const { loading, error, openSlots, bookedSlots, toggleSlot, selectedSlots, setSelectedSlots, save } = useAvailability(userId, slotDuration);
 
@@ -84,7 +84,7 @@ export default function AvailabilityPage() {
   const isExistingOpen = (slot: Date) => openSlots.some(({ startTime }) => roundToMinute(new Date(startTime)).getTime() === slot.getTime());
 
   const handleConfirm = async () => {
-    await save(selectedDate, classId);
+    await save(selectedDate);
   };
 
   const hasBookingsForSelectedDay = useMemo(() => {
