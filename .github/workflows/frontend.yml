@@ -24,6 +24,10 @@ jobs:
           npm install
           npm run build
 
+      - name: Copy web.config to build output
+        run: |
+          cp frontend/web.config frontend/dist/web.config
+
       - name: Azure Login
         uses: azure/login@v1
         with:
